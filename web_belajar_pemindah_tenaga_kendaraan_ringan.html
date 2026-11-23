@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Belajar Pemindah Tenaga Kendaraan Ringan | SMK Negeri 2 Toraja Utara</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            navy: {
+              950: '#070d19',
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+            },
+            steel: {
+              500: '#3b82f6',
+              600: '#2563eb',
+            },
+            amber: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Animasi aliran tenaga pada SVG */
+    @keyframes flowDash {
+      to {
+        stroke-dashoffset: -36;
+      }
+    }
+    @keyframes flowDashReverse {
+      to {
+        stroke-dashoffset: 36;
+      }
+    }
+    .power-line-active {
+      stroke-dasharray: 10 8;
+      animation: flowDash 0.8s linear infinite;
+    }
+    .power-line-reverse {
+      stroke-dasharray: 10 8;
+      animation: flowDashReverse 0.8s linear infinite;
+    }
+
+    @keyframes spinWheel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spinWheelReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+    .wheel-spin-forward {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: spinWheel var(--spin-duration, 1.4s) linear infinite;
+    }
+    .wheel-spin-reverse {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: spinWheelReverse 1.6s linear infinite;
+    }
+
+    /* Sembunyikan scrollbar horizontal pada tab */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Gaya cetak untuk LKPD */
+    @media print {
+      header, nav, .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+      .print-only-full {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="pb-24 md:pb-12">
+
+  <!-- Toast Notifikasi Non-Blocking -->
+  <div id="toast" class="fixed top-4 right-4 z-50 hidden max-w-sm bg-navy-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-amber-500/40 flex items-center gap-3 transition-all duration-300">
+    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0 animate-pulse"></span>
+    <p id="toastMessage" class="text-sm font-medium leading-snug"></p>
+  </div>
+
+  <!-- Header & Navigasi Desktop -->
+  <header class="bg-navy-900 text-white sticky top-0 z-40 shadow-lg border-b border-navy-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <!-- Brand / Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-navy-950 font-extrabold shadow-md shrink-0">
+          <!-- Ikon Roda Gigi SVG -->
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <div>
+          <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
+            TKR Fase F • Disdik Sulsel 2026
+          </span>
+          <h1 class="text-sm sm:text-base font-bold leading-tight text-white">
+            Web Belajar Pemindah Tenaga
+          </h1>
+        </div>
+      </div>
+
+      <!-- Menu Navigasi Desktop -->
+      <nav class="hidden md:flex items-center gap-1.5 bg-navy-800/80 p-1 rounded-xl border border-navy-700">
+        <button onclick="switchTab('beranda')" data-nav="beranda" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all bg-amber-500 text-navy-950">
+          Beranda & Simulasi
+        </button>
+        <button onclick="switchTab('materi')" data-nav="materi" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-300 hover:text-white">
+          5 Modul Materi
+        </button>
+        <button onclick="switchTab('lkpd')" data-nav="lkpd" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-300 hover:text-white">
+          LKPD Kasus
+        </button>
+        <button onclick="switchTab('kuis')" data-nav="kuis" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-300 hover:text-white">
+          Kuis Evaluasi
+        </button>
+        <button onclick="switchTab('profil')" data-nav="profil" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-300 hover:text-white">
+          Referensi
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Kontainer Utama -->
+  <main class="max-w-6xl mx-auto px-4 pt-5 space-y-6">
+
+    <!-- ==================== TAB 1: BERANDA & SIMULASI ==================== -->
+    <section id="tab-beranda" class="tab-section space-y-6">
+      
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-br from-navy-900 via-navy-800 to-slate-900 text-white rounded-2xl p-5 sm:p-7 shadow-xl border border-navy-700 relative overflow-hidden">
+        <div class="absolute -right-12 -top-12 w-48 h-48 rounded-full bg-amber-500/10 blur-2xl pointer-events-none"></div>
+        <div class="absolute -left-12 -bottom-12 w-48 h-48 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
+        
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="space-y-3 max-w-2xl">
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/15 px-3 py-1 rounded-full text-xs text-amber-300 font-medium">
+              <span>Program 10.000 Karya Digital Guru 2026 • Disdik Prov. Sulsel</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+              Web Belajar <span class="text-amber-400">Pemindah Tenaga</span> Kendaraan Ringan
+            </h2>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+              Media pembelajaran digital interaktif untuk memahami fungsi komponen, alur aliran tenaga mesin ke roda, analisis gangguan, dan evaluasi mandiri kompetensi Teknik Kendaraan Ringan (Fase F).
+            </p>
+            <div class="pt-1 flex flex-wrap items-center gap-3 text-xs text-slate-300">
+              <div class="flex items-center gap-2 bg-navy-950/60 px-3 py-2 rounded-xl border border-navy-700">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Pengembang: <strong class="text-white">Rahim Untung Besol, S.Pd.</strong></span>
+              </div>
+              <div class="flex items-center gap-2 bg-navy-950/60 px-3 py-2 rounded-xl border border-navy-700">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                <span><strong class="text-white">SMK Negeri 2 Toraja Utara</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kartu Tujuan Belajar -->
+          <div class="bg-navy-950/70 border border-navy-700 rounded-2xl p-4 sm:p-5 lg:w-80 shrink-0 space-y-2.5">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Tujuan Pembelajaran (Fase F)
+            </h3>
+            <ul class="text-xs sm:text-sm text-slate-300 space-y-2 leading-snug">
+              <li class="flex items-start gap-2">
+                <span class="text-amber-400 font-bold">1.</span>
+                <span>Menjelaskan urutan aliran tenaga dari mesin hingga roda penggerak (FR).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-400 font-bold">2.</span>
+                <span>Mengidentifikasi fungsi kopling, transmisi, propeler, gardan, dan poros roda.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-amber-400 font-bold">3.</span>
+                <span>Mendiagnosis gejala kerusakan sistem pemindah tenaga secara sistematis.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Alur Belajar 4 Langkah -->
+        <div class="relative z-10 mt-6 pt-5 border-t border-navy-700/80 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div class="bg-navy-900/80 border border-navy-700 rounded-xl p-3 flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-amber-500 text-navy-950 font-extrabold text-sm flex items-center justify-center shrink-0">1</span>
+            <div>
+              <p class="text-xs font-bold text-white">Pahami Alur</p>
+              <p class="text-[11px] text-slate-400">Uji simulator tenaga</p>
+            </div>
+          </div>
+          <button onclick="switchTab('materi')" class="text-left bg-navy-900/80 hover:bg-navy-800 border border-navy-700 rounded-xl p-3 flex items-center gap-3 transition">
+            <span class="w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</span>
+            <div>
+              <p class="text-xs font-bold text-white">Pelajari Komponen</p>
+              <p class="text-[11px] text-slate-400">5 modul bertahap</p>
+            </div>
+          </button>
+          <button onclick="switchTab('lkpd')" class="text-left bg-navy-900/80 hover:bg-navy-800 border border-navy-700 rounded-xl p-3 flex items-center gap-3 transition">
+            <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</span>
+            <div>
+              <p class="text-xs font-bold text-white">Analisis LKPD</p>
+              <p class="text-[11px] text-slate-400">3 studi kasus bengkel</p>
+            </div>
+          </button>
+          <button onclick="switchTab('kuis')" class="text-left bg-navy-900/80 hover:bg-navy-800 border border-navy-700 rounded-xl p-3 flex items-center gap-3 transition">
+            <span class="w-8 h-8 rounded-lg bg-purple-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">4</span>
+            <div>
+              <p class="text-xs font-bold text-white">Uji Kuis</p>
+              <p class="text-[11px] text-slate-400">10 soal & pembahasan</p>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- SIMULATOR INTERAKTIF ALIRAN TENAGA (POWER FLOW SIMULATOR) -->
+      <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+        <div class="bg-navy-900 text-white px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Simulasi Interaktif • Tipe FR (Front Engine Rear Drive)</span>
+            <h3 class="text-lg font-bold">Simulator Aliran Tenaga (Power Flow)</h3>
+          </div>
+          <div id="simStatusBadge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 self-start sm:self-auto">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="simStatusText">Tenaga Tersambung ke Roda</span>
+          </div>
+        </div>
+
+        <div class="p-4 sm:p-6 space-y-5">
+          <!-- Panel Kontrol Interaktif -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <!-- Kontrol 1: Mesin -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">1. Kondisi Mesin (Engine)</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btnEngineOn" onclick="setEngine(true)" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-emerald-600 text-white border-emerald-600 shadow-sm">
+                  Mesin Hidup
+                </button>
+                <button id="btnEngineOff" onclick="setEngine(false)" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                  Mesin Mati
+                </button>
+              </div>
+            </div>
+
+            <!-- Kontrol 2: Pedal Kopling -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">2. Posisi Pedal Kopling</label>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btnClutchReleased" onclick="setClutch(false)" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-blue-600 text-white border-blue-600 shadow-sm">
+                  Dilepas (Terhubung)
+                </button>
+                <button id="btnClutchPressed" onclick="setClutch(true)" class="py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+                  Ditekan (Terputus)
+                </button>
+              </div>
+            </div>
+
+            <!-- Kontrol 3: Posisi Gigi Transmisi -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">3. Posisi Tuas Transmisi</label>
+              <div class="grid grid-cols-6 gap-1.5">
+                <button onclick="setGear('N')" data-gear="N" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300">N</button>
+                <button onclick="setGear('1')" data-gear="1" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-amber-500 text-navy-950 border-amber-500 shadow-sm">1</button>
+                <button onclick="setGear('2')" data-gear="2" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300">2</button>
+                <button onclick="setGear('3')" data-gear="3" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300">3</button>
+                <button onclick="setGear('4')" data-gear="4" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300">4</button>
+                <button onclick="setGear('R')" data-gear="R" class="gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300">R</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diagram Skematik SVG Interaktif -->
+          <div class="bg-navy-950 rounded-2xl p-3 sm:p-5 border border-navy-800 overflow-x-auto">
+            <svg id="drivetrainSvg" viewBox="0 0 860 250" class="w-full min-w-[660px] h-auto select-none">
+              <!-- Latar Grid Teknis -->
+              <defs>
+                <pattern id="techGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" stroke-width="0.8"/>
+                </pattern>
+              </defs>
+              <rect width="860" height="250" rx="12" fill="url(#techGrid)" />
+
+              <!-- Label Arah Depan - Belakang -->
+              <text x="30" y="24" fill="#94a3b8" font-size="11" font-weight="700">DEPAN KENDARAAN (MESIN)</text>
+              <text x="645" y="24" fill="#94a3b8" font-size="11" font-weight="700">BELAKANG (PENGGERAK)</text>
+
+              <!-- 1. MESIN (ENGINE) -->
+              <g id="svgEngine">
+                <rect x="28" y="82" width="110" height="86" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+                <text x="83" y="118" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="800">MESIN</text>
+                <text x="83" y="136" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="600">(Engine)</text>
+                <text id="svgEngineRpm" x="83" y="155" text-anchor="middle" fill="#34d399" font-size="10" font-family="monospace">~1.500 RPM</text>
+              </g>
+
+              <!-- Poros Mesin ke Kopling -->
+              <line id="lineEngineClutch" x1="138" y1="125" x2="178" y2="125" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" class="power-line-active"/>
+
+              <!-- 2. KOPLING (CLUTCH) -->
+              <g id="svgClutch">
+                <rect x="178" y="88" width="94" height="74" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+                <!-- Pelat Flywheel & Kampas Visual -->
+                <rect id="clutchPlateLeft" x="214" y="102" width="6" height="46" rx="2" fill="#60a5fa"/>
+                <rect id="clutchPlateRight" x="223" y="102" width="6" height="46" rx="2" fill="#fbbf24"/>
+                <text x="225" y="179" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">KOPLING</text>
+                <text id="svgClutchState" x="225" y="194" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="600">Terhubung</text>
+              </g>
+
+              <!-- Poros Input Transmisi -->
+              <line id="lineClutchTrans" x1="272" y1="125" x2="312" y2="125" stroke="#f59e0b" stroke-width="6" stroke-linecap="round" class="power-line-active"/>
+
+              <!-- 3. TRANSMISI MANUAL -->
+              <g id="svgTrans">
+                <rect x="312" y="80" width="128" height="90" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+                <text x="376" y="114" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="800">TRANSMISI</text>
+                <text x="376" y="131" text-anchor="middle" fill="#93c5fd" font-size="10">Manual Synchromesh</text>
+                <rect x="342" y="140" width="68" height="20" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
+                <text id="svgGearBadge" x="376" y="154" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="800" font-family="monospace">GIGI 1</text>
+              </g>
+
+              <!-- 4. POROS PROPELER (PROPELLER SHAFT) -->
+              <g id="svgPropeller">
+                <!-- U-Joint Kiri -->
+                <circle cx="452" cy="125" r="8" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
+                <!-- Batang Poros -->
+                <line id="linePropeller" x1="460" y1="125" x2="588" y2="125" stroke="#f59e0b" stroke-width="7" stroke-linecap="round" class="power-line-active"/>
+                <!-- U-Joint Kanan -->
+                <circle cx="596" cy="125" r="8" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
+                <text x="524" y="106" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="700">POROS PROPELER</text>
+                <text x="524" y="148" text-anchor="middle" fill="#94a3b8" font-size="10">+ Universal Joint</text>
+              </g>
+
+              <!-- 5. GARDAN (DIFFERENTIAL) -->
+              <g id="svgDiff">
+                <circle cx="646" cy="125" r="40" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+                <circle cx="646" cy="125" r="18" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+                <text x="646" y="183" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="800">GARDAN</text>
+                <text x="646" y="198" text-anchor="middle" fill="#93c5fd" font-size="10">(Differential 90°)</text>
+              </g>
+
+              <!-- 6. POROS RODA (AXLE SHAFT) ATAS & BAWAH -->
+              <line id="lineAxleTop" x1="646" y1="85" x2="646" y2="54" stroke="#f59e0b" stroke-width="6" class="power-line-active"/>
+              <line id="lineAxleBottom" x1="646" y1="165" x2="646" y2="196" stroke="#f59e0b" stroke-width="6" class="power-line-active"/>
+
+              <!-- 7. RODA PENGGERAK KIRI & KANAN -->
+              <!-- Roda Kiri (Atas pada tampilan atas) -->
+              <g id="wheelTopGroup">
+                <rect x="612" y="28" width="68" height="26" rx="8" fill="#0f172a" stroke="#cbd5e1" stroke-width="2.5"/>
+                <line id="wheelTreadTop" x1="622" y1="41" x2="670" y2="41" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8 6" class="power-line-active"/>
+                <text x="735" y="45" fill="#e2e8f0" font-size="11" font-weight="700">RODA KIRI</text>
+              </g>
+
+              <!-- Roda Kanan (Bawah pada tampilan atas) -->
+              <g id="wheelBottomGroup">
+                <rect x="612" y="196" width="68" height="26" rx="8" fill="#0f172a" stroke="#cbd5e1" stroke-width="2.5"/>
+                <line id="wheelTreadBottom" x1="622" y1="209" x2="670" y2="209" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8 6" class="power-line-active"/>
+                <text x="735" y="213" fill="#e2e8f0" font-size="11" font-weight="700">RODA KANAN</text>
+              </g>
+
+              <!-- Indikator Arah Putar Roda -->
+              <g transform="translate(755, 100)">
+                <rect x="0" y="0" width="84" height="50" rx="10" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+                <text x="42" y="19" text-anchor="middle" fill="#94a3b8" font-size="9" font-weight="700">ARAH GERAK</text>
+                <text id="svgDirectionText" x="42" y="38" text-anchor="middle" fill="#34d399" font-size="12" font-weight="800">MAJU →</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Output Analisis Real-Time -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3.5">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-blue-700">Karakteristik Torsi & Putaran</p>
+              <p id="simTorqueInfo" class="text-sm font-bold text-navy-900 mt-1">Torsi Sangat Besar • Putaran Lambat (Rasio ~3.5 : 1)</p>
+            </div>
+            <div class="sm:col-span-2 bg-amber-50 border border-amber-200 rounded-xl p-3.5">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-amber-800">Analisis Teknis Aliran Tenaga</p>
+              <p id="simExplanation" class="text-xs sm:text-sm text-slate-800 mt-1 leading-relaxed">
+                Mesin hidup dan pedal kopling dilepas sehingga tenaga diteruskan penuh ke transmisi. Pada Gigi 1, roda gigi reduksi menghasilkan momen puntir terbesar untuk start awal atau menanjak.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: 5 MODUL MATERI BERTAHAP ==================== -->
+    <section id="tab-materi" class="tab-section hidden space-y-5">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Modul Pembelajaran Terstruktur</span>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-navy-900 mt-0.5">5 Komponen Utama Pemindah Tenaga</h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-1">
+          Pilih tab komponen di bawah ini secara berurutan untuk mempelajari fungsi, bagian utama, prinsip kerja, dan inti pemeriksaan bengkel.
+        </p>
+
+        <!-- Navigasi Sub-Modul (Scrollable Horizontal di HP) -->
+        <div class="mt-4 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button onclick="selectModule(0)" data-mod="0" class="mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-navy-900 text-white border-navy-900 shadow-sm">
+            1. Sistem Kopling
+          </button>
+          <button onclick="selectModule(1)" data-mod="1" class="mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+            2. Transmisi & Synchromesh
+          </button>
+          <button onclick="selectModule(2)" data-mod="2" class="mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+            3. Poros Propeler
+          </button>
+          <button onclick="selectModule(3)" data-mod="3" class="mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+            4. Gardan (Differential)
+          </button>
+          <button onclick="selectModule(4)" data-mod="4" class="mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200">
+            5. Poros Roda (Axle Shaft)
+          </button>
+        </div>
+      </div>
+
+      <!-- Konten Modul Dinamis -->
+      <div id="moduleContent" class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+        <!-- Diisi otomatis oleh JavaScript -->
+      </div>
+
+      <!-- Navigasi Lanjut / Sebelumnya Antar Modul -->
+      <div class="flex items-center justify-between gap-3">
+        <button id="btnPrevMod" onclick="prevModule()" class="px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 transition">
+          ← Komponen Sebelumnya
+        </button>
+        <button id="btnNextMod" onclick="nextModule()" class="px-4 py-3 rounded-xl bg-blue-600 text-white font-bold text-xs sm:text-sm hover:bg-blue-700 transition shadow-sm">
+          Komponen Berikutnya →
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: LKPD STUDI KASUS BENGKEL ==================== -->
+    <section id="tab-lkpd" class="tab-section hidden space-y-5">
+      <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-4">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Lembar Kerja Peserta Didik (LKPD) Digital</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-navy-900">Analisis Studi Kasus Diagnosis Bengkel</h2>
+          </div>
+          <span class="text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full self-start">
+            3 Kasus Praktik TKR
+          </span>
+        </div>
+
+        <!-- Identitas Siswa -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div>
+            <label for="lkpdNama" class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap Peserta Didik *</label>
+            <input id="lkpdNama" type="text" placeholder="Contoh: Andi Pratama" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
+          </div>
+          <div>
+            <label for="lkpdKelas" class="block text-xs font-bold text-slate-700 mb-1">Kelas / Konsentrasi *</label>
+            <select id="lkpdKelas" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+              <option value="XI TKR 1">XI TKR 1</option>
+              <option value="XI TKR 2">XI TKR 2</option>
+              <option value="XII TKR 1">XII TKR 1</option>
+              <option value="XII TKR 2">XII TKR 2</option>
+            </select>
+          </div>
+          <div>
+            <label for="lkpdKelompok" class="block text-xs font-bold text-slate-700 mb-1">Kelompok / Unit Praktik</label>
+            <input id="lkpdKelompok" type="text" placeholder="Contoh: Kelompok 2 / Stand B" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"/>
+          </div>
+        </div>
+
+        <!-- 3 Studi Kasus -->
+        <div class="space-y-5">
+          <!-- Kasus 1 -->
+          <div class="border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 bg-white">
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-xl bg-amber-500 text-navy-950 font-extrabold text-sm flex items-center justify-center shrink-0 mt-0.5">01</span>
+              <div>
+                <h3 class="font-bold text-navy-900 text-base">Kasus 1: Tenaga Mesin Meraung Saat Menanjak, Laju Mobil Lambat</h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  <strong>Skenario Bengkel:</strong> Sebuah kendaraan ringan transmisi manual dibawa ke bengkel dengan keluhan putaran mesin (RPM) naik tinggi saat pedal gas diinjak pada jalan menanjak, namun kecepatan kendaraan tidak bertambah sebanding dan tercium bau hangus ringan dari bagian bawah mesin.
+                </p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">1. Dugaan Komponen Bermasalah</label>
+                <textarea id="k1Komponen" rows="3" placeholder="Tuliskan komponen pada sistem kopling yang diduga bermasalah..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">2. Langkah Pemeriksaan Bengkel</label>
+                <textarea id="k1Periksa" rows="3" placeholder="Jelaskan cara memeriksa komponen dan penyetelan kopling..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">3. Solusi Perbaikan</label>
+                <textarea id="k1Solusi" rows="3" placeholder="Tindakan perbaikan atau penggantian yang tepat..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kasus 2 -->
+          <div class="border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 bg-white">
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0 mt-0.5">02</span>
+              <div>
+                <h3 class="font-bold text-navy-900 text-base">Kasus 2: Terdengar Bunyi "Krek" Kasar Saat Memindahkan ke Gigi 2</h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  <strong>Skenario Bengkel:</strong> Pengemudi mengeluhkan tuas transmisi terasa keras dan muncul bunyi benturan roda gigi ("krek") setiap kali memindahkan gigi dari 1 ke 2 atau 3 ke 2 saat kendaraan berjalan, padahal pedal kopling sudah diinjak penuh.
+                </p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">1. Dugaan Komponen Bermasalah</label>
+                <textarea id="k2Komponen" rows="3" placeholder="Identifikasi bagian unit synchromesh yang aus..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">2. Langkah Pemeriksaan Bengkel</label>
+                <textarea id="k2Periksa" rows="3" placeholder="Sebutkan alat ukur (feeler gauge) dan celah yang diperiksa..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">3. Solusi Perbaikan</label>
+                <textarea id="k2Solusi" rows="3" placeholder="Tindakan perbaikan komponen & oli transmisi..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kasus 3 -->
+          <div class="border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3 bg-white">
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0 mt-0.5">03</span>
+              <div>
+                <h3 class="font-bold text-navy-900 text-base">Kasus 3: Bunyi Dengung dari Bagian Belakang Saat Kecepatan Tinggi</h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  <strong>Skenario Bengkel:</strong> Kendaraan penggerak roda belakang (FR) mengeluarkan suara dengung konstan dari area kolong belakang ketika kecepatan di atas 60 km/jam dan bertambah jelas saat pedal gas dilepas maupun ditekan.
+                </p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">1. Dugaan Komponen Bermasalah</label>
+                <textarea id="k3Komponen" rows="3" placeholder="Identifikasi komponen pada unit gardan (differential)..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">2. Langkah Pemeriksaan Bengkel</label>
+                <textarea id="k3Periksa" rows="3" placeholder="Jelaskan pemeriksaan backlash, kontak gigi, atau oli gardan..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">3. Solusi Perbaikan</label>
+                <textarea id="k3Solusi" rows="3" placeholder="Tindakan penyetelan atau penggantian komponen..." class="w-full p-3 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi LKPD -->
+        <div class="no-print flex flex-wrap items-center gap-3 pt-2">
+          <button onclick="generateLkpdSummary()" class="px-5 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs sm:text-sm shadow-md transition">
+            Simpan & Ringkas Jawaban LKPD
+          </button>
+          <button onclick="fillSampleLkpd()" class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm border border-slate-300 transition">
+            Isi Contoh Jawaban (Panduan)
+          </button>
+        </div>
+
+        <!-- Hasil Ringkasan LKPD -->
+        <div id="lkpdResultBox" class="hidden print-only-full bg-slate-50 border-2 border-emerald-500/40 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Rekap Hasil Kerja LKPD</span>
+              <h4 id="lkpdSummaryTitle" class="text-lg font-extrabold text-navy-900"></h4>
+            </div>
+            <div class="no-print flex flex-wrap gap-2">
+              <button onclick="copyLkpdText()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">
+                Salin Hasil LKPD
+              </button>
+              <button onclick="window.print()" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition">
+                Cetak / Simpan PDF
+              </button>
+            </div>
+          </div>
+          <pre id="lkpdSummaryOutput" class="whitespace-pre-wrap font-sans text-xs sm:text-sm text-slate-800 leading-relaxed bg-white p-4 rounded-xl border border-slate-200"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: KUIS EVALUASI INTERAKTIF ==================== -->
+    <section id="tab-kuis" class="tab-section hidden space-y-5">
+      
+      <!-- Layar Awal Kuis -->
+      <div id="quizIntro" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 max-w-2xl mx-auto space-y-5">
+        <div class="space-y-1.5">
+          <span class="text-xs font-bold uppercase tracking-wider text-purple-600">Asesmen Formatif Mandiri</span>
+          <h2 class="text-2xl font-extrabold text-navy-900">Kuis Sistem Pemindah Tenaga</h2>
+          <p class="text-xs sm:text-sm text-slate-600">
+            Uji pemahaman Anda melalui 10 soal pilihan ganda berbasis konsep dan analisis bengkel. Nilai ketuntasan minimal (KKTP) adalah <strong>75</strong>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div>
+            <label for="quizNama" class="block text-xs font-bold text-slate-700 mb-1">Nama Peserta Didik *</label>
+            <input id="quizNama" type="text" placeholder="Masukkan nama lengkap" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"/>
+          </div>
+          <div>
+            <label for="quizKelas" class="block text-xs font-bold text-slate-700 mb-1">Kelas *</label>
+            <select id="quizKelas" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none">
+              <option value="XI TKR 1">XI TKR 1</option>
+              <option value="XI TKR 2">XI TKR 2</option>
+              <option value="XII TKR 1">XII TKR 1</option>
+              <option value="XII TKR 2">XII TKR 2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 bg-purple-50 border border-purple-200 p-3.5 rounded-xl">
+          <span>Jumlah Soal: <strong class="text-navy-900">10 Pilihan Ganda</strong></span>
+          <span>Umpan Balik: <strong class="text-navy-900">Skor & Pembahasan Lengkap</strong></span>
+        </div>
+
+        <button onclick="startQuiz()" class="w-full py-3.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-sm shadow-md transition">
+          Mulai Mengerjakan Kuis →
+        </button>
+      </div>
+
+      <!-- Layar Pengerjaan Soal -->
+      <div id="quizBody" class="hidden space-y-5">
+        <div class="bg-navy-900 text-white rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p id="quizStudentInfo" class="text-xs text-amber-400 font-bold"></p>
+            <h3 class="text-base sm:text-lg font-extrabold">Jawab Seluruh Pertanyaan Berikut</h3>
+          </div>
+          <div class="text-xs font-mono bg-navy-800 px-3 py-1.5 rounded-xl border border-navy-700">
+            Terjawab: <span id="quizAnsweredCount" class="text-amber-400 font-bold">0</span> / 10
+          </div>
+        </div>
+
+        <div id="quizQuestionsContainer" class="space-y-4">
+          <!-- 10 Soal dirender oleh JavaScript -->
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p class="text-xs text-slate-600">Pastikan seluruh 10 nomor sudah dipilih sebelum menekan tombol selesai.</p>
+          <button onclick="submitQuiz()" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition">
+            Selesai & Lihat Skor
+          </button>
+        </div>
+      </div>
+
+      <!-- Layar Hasil & Pembahasan Kuis -->
+      <div id="quizResult" class="hidden space-y-5">
+        <div class="bg-gradient-to-br from-navy-900 to-navy-800 text-white rounded-2xl p-6 shadow-lg border border-navy-700">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2">
+              <span id="resultStatusBadge" class="inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider"></span>
+              <h3 id="resultStudentHeading" class="text-xl sm:text-2xl font-extrabold"></h3>
+              <p id="resultMessage" class="text-sm text-slate-300"></p>
+            </div>
+            <div class="bg-navy-950/80 border border-navy-700 rounded-2xl px-6 py-4 text-center shrink-0">
+              <p class="text-xs uppercase tracking-wider text-slate-400 font-bold">Skor Akhir</p>
+              <p id="resultScoreNumber" class="text-4xl font-extrabold text-amber-400 font-mono mt-1">0</p>
+              <p id="resultCorrectDetail" class="text-xs text-slate-400 mt-1">0 dari 10 Benar</p>
+            </div>
+          </div>
+
+          <!-- Analisis Penguasaan Per Sub-Materi -->
+          <div class="mt-5 pt-4 border-t border-navy-700">
+            <p class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2.5">Analisis Penguasaan Sub-Materi</p>
+            <div id="topicBreakdown" class="grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button onclick="copyQuizReport()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-navy-950 font-bold text-xs sm:text-sm transition">
+              Salin Laporan Nilai
+            </button>
+            <button onclick="resetQuiz()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition">
+              Ulangi Kuis
+            </button>
+          </div>
+        </div>
+
+        <!-- Pembahasan Lengkap Tiap Nomor -->
+        <div class="space-y-3">
+          <h4 class="text-base font-extrabold text-navy-900">Pembahasan Jawaban Lengkap</h4>
+          <div id="quizReviewContainer" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: REFERENSI & PROFIL PENGEMBANG ==================== -->
+    <section id="tab-profil" class="tab-section hidden space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Profil Pengembang -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Identitas Karya & Pengembang</span>
+          <h2 class="text-xl font-extrabold text-navy-900">Web Belajar Pemindah Tenaga Kendaraan Ringan</h2>
+          <div class="space-y-2.5 text-sm text-slate-700">
+            <div class="flex justify-between py-2 border-b border-slate-100">
+              <span class="text-slate-500">Nama Pengembang</span>
+              <span class="font-bold text-navy-900">Rahim Untung Besol, S.Pd.</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-100">
+              <span class="text-slate-500">Satuan Pendidikan</span>
+              <span class="font-bold text-navy-900">SMK Negeri 2 Toraja Utara</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-100">
+              <span class="text-slate-500">Mata Pelajaran / Fase</span>
+              <span class="font-bold text-navy-900">Teknik Kendaraan Ringan / Fase F</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-slate-100">
+              <span class="text-slate-500">Kategori Karya</span>
+              <span class="font-bold text-navy-900">Aplikasi Website Pembelajaran</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="text-slate-500">Program</span>
+              <span class="font-bold text-blue-700">10.000 Karya Digital Guru 2026 (Disdik Sulsel)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Daftar Referensi Teknis -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Daftar Rujukan Materi</span>
+          <h3 class="text-xl font-extrabold text-navy-900">Sumber Belajar & Standar Kompetensi</h3>
+          <ul class="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <li class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <strong>1. Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi.</strong> Capaian Pembelajaran Konsentrasi Keahlian Teknik Kendaraan Ringan (Fase F), Elemen Sistem Pemindah Tenaga Kendaraan Ringan.
+            </li>
+            <li class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <strong>2. Toyota Astra Motor (TAM).</strong> <em>New Step 1 Training Manual: Chassis Group (Clutch, Manual Transmission, Propeller Shaft, Differential, Axle Shaft)</em>. Jakarta: PT Toyota Astra Motor.
+            </li>
+            <li class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <strong>3. Direktorat SMK Kemendikbudristek.</strong> Modul Ajar Pemeliharaan Sasis dan Pemindah Tenaga Kendaraan Ringan Kelas XI dan XII SMK.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Navigasi Bawah Khusus Mobile (Thumb-Friendly) -->
+  <nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-navy-900 border-t border-navy-800 px-1 py-1.5 shadow-2xl">
+    <div class="grid grid-cols-5 gap-1">
+      <button onclick="switchTab('beranda')" data-nav="beranda" class="nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-amber-400 bg-navy-800">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">Beranda</span>
+      </button>
+      <button onclick="switchTab('materi')" data-nav="materi" class="nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">Materi</span>
+      </button>
+      <button onclick="switchTab('lkpd')" data-nav="lkpd" class="nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">LKPD</span>
+      </button>
+      <button onclick="switchTab('kuis')" data-nav="kuis" class="nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">Kuis</span>
+      </button>
+      <button onclick="switchTab('profil')" data-nav="profil" class="nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="text-[10px] font-bold mt-0.5">Info</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // ==================== UTILITAS NOTIFIKASI & CLIPBOARD ====================
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    function copyTextFallback(text, successMsg) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        showToast('Gagal menyalin otomatis. Silakan blok teks dan salin manual.');
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // ==================== NAVIGASI UTAMA TAB ====================
+    function switchTab(tabName) {
+      // Sembunyikan semua section
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.add('hidden'));
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+      // Update gaya tombol desktop
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.dataset.nav === tabName) {
+          btn.className = 'nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all bg-amber-500 text-navy-950';
+        } else {
+          btn.className = 'nav-btn px-3.5 py-2 rounded-lg text-sm font-semibold transition-all text-slate-300 hover:text-white';
+        }
+      });
+
+      // Update gaya tombol mobile
+      document.querySelectorAll('.nav-btn-mobile').forEach(btn => {
+        if (btn.dataset.nav === tabName) {
+          btn.className = 'nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-amber-400 bg-navy-800';
+        } else {
+          btn.className = 'nav-btn-mobile flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400';
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== 1. SIMULATOR ALIRAN TENAGA ====================
+    const simState = {
+      engineOn: true,
+      clutchPressed: false,
+      gear: '1'
+    };
+
+    const gearSpecs = {
+      'N': {
+        label: 'NETRAL (N)',
+        torque: 'Tidak Ada Pemindahan Tenaga ke Poros Output',
+        desc: 'Gigi transmisi dalam posisi netral (sliding sleeve tidak mengunci roda gigi tingkat). Putaran hanya sampai pada counter gear transmisi, sehingga kendaraan diam.'
+      },
+      '1': {
+        label: 'GIGI 1',
+        torque: 'Torsi Sangat Besar • Putaran Lambat (Rasio ~3.5 : 1)',
+        desc: 'Roda gigi reduksi terbesar bekerja untuk melipatgandakan momen puntir. Sangat dibutuhkan saat kendaraan mulai berjalan (start) atau melewati tanjakan curam.'
+      },
+      '2': {
+        label: 'GIGI 2',
+        torque: 'Torsi Besar • Putaran Menengah Bawah (Rasio ~2.0 : 1)',
+        desc: 'Momen puntir masih cukup besar dengan kecepatan putar poros output meningkat dibanding Gigi 1, cocok untuk akselerasi awal atau tanjakan landai.'
+      },
+      '3': {
+        label: 'GIGI 3',
+        torque: 'Torsi Sedang • Putaran Menengah Atas (Rasio ~1.3 : 1)',
+        desc: 'Keseimbangan antara tenaga dan kecepatan jelajah pada jalan datar dalam kota dengan efisiensi putaran mesin yang lebih baik.'
+      },
+      '4': {
+        label: 'GIGI 4',
+        torque: 'Direct Drive • Putaran Cepat (Rasio ~1.0 : 1)',
+        desc: 'Poros input terhubung langsung dengan poros output (1:1). Putaran mesin diteruskan utuh ke poros propeler untuk kecepatan jelajah tinggi.'
+      },
+      'R': {
+        label: 'MUNDUR (R)',
+        torque: 'Torsi Besar • Arah Putar Terbalik (Reverse Idler Gear)',
+        desc: 'Reverse idler gear disisipkan di antara counter gear dan reverse gear sehingga arah putaran poros propeler, gardan, dan roda berbalik untuk bergerak mundur.'
+      }
+    };
+
+    function setEngine(isOn) {
+      simState.engineOn = isOn;
+      document.getElementById('btnEngineOn').className = isOn
+        ? 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-emerald-600 text-white border-emerald-600 shadow-sm'
+        : 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+      document.getElementById('btnEngineOff').className = !isOn
+        ? 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-rose-600 text-white border-rose-600 shadow-sm'
+        : 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+      updateSimulator();
+    }
+
+    function setClutch(isPressed) {
+      simState.clutchPressed = isPressed;
+      document.getElementById('btnClutchReleased').className = !isPressed
+        ? 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-blue-600 text-white border-blue-600 shadow-sm'
+        : 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+      document.getElementById('btnClutchPressed').className = isPressed
+        ? 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-amber-500 text-navy-950 border-amber-500 shadow-sm'
+        : 'py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+      updateSimulator();
+    }
+
+    function setGear(gearVal) {
+      simState.gear = gearVal;
+      document.querySelectorAll('.gear-btn').forEach(btn => {
+        if (btn.dataset.gear === gearVal) {
+          btn.className = 'gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-amber-500 text-navy-950 border-amber-500 shadow-sm';
+        } else {
+          btn.className = 'gear-btn py-2.5 rounded-xl text-xs font-extrabold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+        }
+      });
+      updateSimulator();
+    }
+
+    function setLineState(el, active, reverse = false) {
+      el.classList.remove('power-line-active', 'power-line-reverse');
+      if (active) {
+        el.setAttribute('stroke', reverse ? '#fb7185' : '#f59e0b');
+        el.classList.add(reverse ? 'power-line-reverse' : 'power-line-active');
+      } else {
+        el.setAttribute('stroke', '#475569');
+      }
+    }
+
+    function updateSimulator() {
+      const { engineOn, clutchPressed, gear } = simState;
+      const spec = gearSpecs[gear];
+
+      const lineEngineClutch = document.getElementById('lineEngineClutch');
+      const lineClutchTrans = document.getElementById('lineClutchTrans');
+      const linePropeller = document.getElementById('linePropeller');
+      const lineAxleTop = document.getElementById('lineAxleTop');
+      const lineAxleBottom = document.getElementById('lineAxleBottom');
+      const wheelTreadTop = document.getElementById('wheelTreadTop');
+      const wheelTreadBottom = document.getElementById('wheelTreadBottom');
+
+      const clutchPlateRight = document.getElementById('clutchPlateRight');
+      const svgClutchState = document.getElementById('svgClutchState');
+      const svgEngineRpm = document.getElementById('svgEngineRpm');
+      const svgGearBadge = document.getElementById('svgGearBadge');
+      const svgDirectionText = document.getElementById('svgDirectionText');
+
+      const simStatusBadge = document.getElementById('simStatusBadge');
+      const simStatusText = document.getElementById('simStatusText');
+      const simTorqueInfo = document.getElementById('simTorqueInfo');
+      const simExplanation = document.getElementById('simExplanation');
+
+      svgGearBadge.textContent = spec.label;
+
+      // Visual jarak pelat kopling
+      if (clutchPressed) {
+        clutchPlateRight.setAttribute('x', '234');
+        svgClutchState.textContent = 'Terputus (Ditekan)';
+        svgClutchState.setAttribute('fill', '#fb7185');
+      } else {
+        clutchPlateRight.setAttribute('x', '223');
+        svgClutchState.textContent = 'Terhubung';
+        svgClutchState.setAttribute('fill', '#fbbf24');
+      }
+
+      if (!engineOn) {
+        // Mesin mati: seluruh aliran berhenti
+        svgEngineRpm.textContent = '0 RPM (MATI)';
+        svgEngineRpm.setAttribute('fill', '#fb7185');
+        setLineState(lineEngineClutch, false);
+        setLineState(lineClutchTrans, false);
+        setLineState(linePropeller, false);
+        setLineState(lineAxleTop, false);
+        setLineState(lineAxleBottom, false);
+        setLineState(wheelTreadTop, false);
+        setLineState(wheelTreadBottom, false);
+
+        svgDirectionText.textContent = 'DIAM';
+        svgDirectionText.setAttribute('fill', '#94a3b8');
+
+        simStatusBadge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 self-start sm:self-auto';
+        simStatusText.textContent = 'Mesin Mati • Tidak Ada Tenaga';
+        simTorqueInfo.textContent = '0 Nm • Sistem Berhenti';
+        simExplanation.textContent = 'Mesin dalam keadaan mati sehingga tidak ada putaran poros engkol (flywheel) yang dihasilkan untuk diteruskan ke sistem pemindah tenaga.';
+        return;
+      }
+
+      // Mesin hidup
+      svgEngineRpm.textContent = '~1.500 RPM';
+      svgEngineRpm.setAttribute('fill', '#34d399');
+      setLineState(lineEngineClutch, true, false);
+
+      if (clutchPressed) {
+        // Kopling ditekan: terputus setelah kopling
+        setLineState(lineClutchTrans, false);
+        setLineState(linePropeller, false);
+        setLineState(lineAxleTop, false);
+        setLineState(lineAxleBottom, false);
+        setLineState(wheelTreadTop, false);
+        setLineState(wheelTreadBottom, false);
+
+        svgDirectionText.textContent = 'TERPUTUS';
+        svgDirectionText.setAttribute('fill', '#fbbf24');
+
+        simStatusBadge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 self-start sm:self-auto';
+        simStatusText.textContent = 'Kopling Ditekan • Aliran Terputus';
+        simTorqueInfo.textContent = 'Putaran Tertahan di Flywheel';
+        simExplanation.textContent = 'Pedal kopling ditekan penuh sehingga release bearing menekan pegas diafragma dan membebaskan jepitan kampas kopling. Putaran mesin tidak masuk ke transmisi (posisi aman untuk memindahkan gigi).';
+        return;
+      }
+
+      // Kopling dilepas (terhubung) -> masuk ke transmisi
+      setLineState(lineClutchTrans, true, false);
+
+      if (gear === 'N') {
+        setLineState(linePropeller, false);
+        setLineState(lineAxleTop, false);
+        setLineState(lineAxleBottom, false);
+        setLineState(wheelTreadTop, false);
+        setLineState(wheelTreadBottom, false);
+
+        svgDirectionText.textContent = 'NETRAL';
+        svgDirectionText.setAttribute('fill', '#93c5fd');
+
+        simStatusBadge.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/40 self-start sm:self-auto';
+        simStatusText.textContent = 'Transmisi Netral • Kendaraan Diam';
+        simTorqueInfo.textContent = spec.torque;
+        simExplanation.textContent = spec.desc;
+        return;
+      }
+
+      // Gigi masuk (1, 2, 3, 4, atau R)
+      const isRev = gear === 'R';
+      setLineState(linePropeller, true, isRev);
+      setLineState(lineAxleTop, true, isRev);
+      setLineState(lineAxleBottom, true, isRev);
+      setLineState(wheelTreadTop, true, isRev);
+      setLineState(wheelTreadBottom, true, isRev);
+
+      svgDirectionText.textContent = isRev ? '← MUNDUR' : 'MAJU →';
+      svgDirectionText.setAttribute('fill', isRev ? '#fb7185' : '#34d399');
+
+      simStatusBadge.className = isRev
+        ? 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 self-start sm:self-auto'
+        : 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 self-start sm:self-auto';
+      simStatusText.textContent = isRev ? 'Gigi Mundur Aktif • Arah Berbalik' : `Tenaga Tersambung (${spec.label})`;
+      simTorqueInfo.textContent = spec.torque;
+      simExplanation.textContent = spec.desc;
+    }
+
+    // ==================== 2. DATA & RENDER 5 MODUL MATERI ====================
+    const modulesData = [
+      {
+        badge: 'Modul 01 • Posisi Terdepan Setelah Mesin',
+        title: 'Sistem Kopling (Clutch)',
+        subtitle: 'Menghubungkan dan memutuskan putaran mesin ke transmisi secara lembut tanpa kejutan.',
+        fungsi: [
+          'Memutuskan putaran mesin ke transmisi saat kendaraan berhenti atau saat perpindahan gigi.',
+          'Menghubungkan tenaga mesin secara bertahap dan lembut agar kendaraan bergerak tanpa hentakan.',
+          'Meredam getaran puntir dari poros engkol mesin melalui torsion damper pada kampas kopling.'
+        ],
+        komponen: [
+          'Flywheel (Roda Gila): Bidang gesek sisi mesin sekaligus penyimpan energi putar.',
+          'Clutch Disc (Kampas Kopling): Pelat gesek berlapis facing dengan torsion spring dan hub beralur.',
+          'Clutch Cover & Pressure Plate: Menekan kampas kopling ke flywheel menggunakan pegas diafragma.',
+          'Release Bearing & Release Fork: Menekan ujung pegas diafragma saat pedal kopling diinjak.'
+        ],
+        caraKerja: [
+          'Pedal Kopling Dilepas: Pegas diafragma menekan pressure plate → kampas kopling terjepit kuat di antara flywheel dan pressure plate → tenaga mesin mengalir penuh ke poros input transmisi.',
+          'Pedal Kopling Ditekan: Release fork mendorong release bearing menekan pegas diafragma → pressure plate tertarik mundur → kampas kopling bebas → putaran mesin terputus.'
+        ],
+        gejala: [
+          'Kopling Selip: Kampas kopling tipis/terkena oli, pegas diafragma lemah, atau gerak bebas (free play) pedal terlalu kecil.',
+          'Kopling Bergetar (Judder): Permukaan flywheel/pressure plate tidak rata atau kampas kopling mengeras.',
+          'Gigi Sulit Masuk: Free play pedal terlalu besar atau sistem hidrolik kopling masuk angin.'
+        ],
+        intiBengkel: 'Selalu periksa ketinggian pedal dan free play pedal kopling (umumnya 15–25 mm) sebelum membongkar unit kopling. Saat perakitan, gunakan clutch alignment tool agar kampas kopling tepat center.',
+        svg: `
+          <svg viewBox="0 0 600 180" class="w-full h-auto bg-navy-950 rounded-xl border border-navy-800">
+            <text x="20" y="24" fill="#fbbf24" font-size="11" font-weight="700">SKEMA SUSUNAN UNIT KOPLING DIAFRAGMA</text>
+            <!-- Flywheel -->
+            <rect x="60" y="45" width="26" height="95" rx="4" fill="#3b82f6"/>
+            <text x="73" y="158" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="700">Flywheel</text>
+            <!-- Clutch Disc -->
+            <rect x="96" y="52" width="16" height="81" rx="3" fill="#f59e0b"/>
+            <rect x="112" y="82" width="40" height="20" rx="3" fill="#fbbf24"/>
+            <text x="115" y="158" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">Kampas</text>
+            <!-- Pressure Plate -->
+            <rect x="122" y="52" width="22" height="81" rx="4" fill="#64748b"/>
+            <text x="165" y="158" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="700">Pressure Plate</text>
+            <!-- Diaphragm Spring -->
+            <path d="M 148 56 L 185 82 M 148 128 L 185 102" stroke="#34d399" stroke-width="4" stroke-linecap="round"/>
+            <text x="225" y="65" fill="#34d399" font-size="10" font-weight="700">Pegas Diafragma</text>
+            <!-- Release Bearing -->
+            <rect x="192" y="76" width="26" height="32" rx="5" fill="#fb7185"/>
+            <text x="255" y="125" fill="#fb7185" font-size="10" font-weight="700">Release Bearing</text>
+            <!-- Poros Input -->
+            <line x1="218" y1="92" x2="360" y2="92" stroke="#94a3b8" stroke-width="10"/>
+            <text x="310" y="78" text-anchor="middle" fill="#e2e8f0" font-size="10">Poros Input Transmisi →</text>
+            <!-- Legend Kanan -->
+            <rect x="385" y="42" width="195" height="105" rx="8" fill="#1e293b" stroke="#334155"/>
+            <text x="400" y="64" fill="#ffffff" font-size="11" font-weight="700">Prinsip Jepit (Clamping):</text>
+            <text x="400" y="84" fill="#cbd5e1" font-size="10">• Pedal Lepas = Terjepit</text>
+            <text x="400" y="102" fill="#cbd5e1" font-size="10">• Pedal Injak = Terbebas</text>
+            <text x="400" y="122" fill="#fbbf24" font-size="10">• Redam kejut: Torsion Spring</text>
+          </svg>
+        `
+      },
+      {
+        badge: 'Modul 02 • Pengatur Momen & Kecepatan',
+        title: 'Transmisi Manual & Unit Synchromesh',
+        subtitle: 'Mengubah perbandingan momen puntir dan kecepatan putar sesuai kondisi beban jalan.',
+        fungsi: [
+          'Menghasilkan momen puntir (torsi) besar saat start awal dan menanjak (Gigi 1 & 2).',
+          'Menghasilkan kecepatan tinggi dengan putaran mesin ekonomis pada jalan datar (Gigi 4 / Overdrive).',
+          'Memungkinkan kendaraan bergerak mundur (Reverse) dan berhenti saat mesin hidup (Netral).'
+        ],
+        komponen: [
+          'Input Shaft & Main Gear: Menerima putaran dari kampas kopling.',
+          'Counter Gear (Cluster Gear): Roda gigi susun yang meneruskan putaran ke roda gigi tingkat.',
+          'Output Shaft (Main Shaft): Meneruskan tenaga keluar menuju poros propeler.',
+          'Unit Synchromesh: Terdiri dari Clutch Hub, Hub Sleeve, Shifting Key, Key Spring, dan Synchronizer Ring.'
+        ],
+        caraKerja: [
+          'Tahap 1 (Pengereman Awal): Hub sleeve bergeser menekan synchronizer ring ke bagian konis roda gigi tingkat sehingga terjadi gesekan awal.',
+          'Tahap 2 (Penyamaan Putaran): Chamfer hub sleeve tertahan alur synchronizer ring hingga kecepatan putar keduanya benar-benar sama.',
+          'Tahap 3 (Perkaitan Penuh): Setelah putaran sama, hub sleeve meluncur mulus mengunci dog teeth roda gigi tingkat tanpa bunyi benturan.'
+        ],
+        gejala: [
+          'Gigi Berbunyi "Krek" Saat Masuk: Bagian konis/alur synchronizer ring aus sehingga gagal menyamakan putaran.',
+          'Gigi Loncat ke Netral Sendiri: Alur hub sleeve aus, shifting key lemah, atau bantalan poros oblak.'
+        ],
+        intiBengkel: 'Ukur celah antara synchronizer ring dan bagian konis roda gigi menggunakan feeler gauge (standar umumnya 1,0–2,0 mm; limit minimal 0,8 mm). Jika di bawah limit, ganti synchronizer ring.',
+        svg: `
+          <svg viewBox="0 0 600 180" class="w-full h-auto bg-navy-950 rounded-xl border border-navy-800">
+            <text x="20" y="24" fill="#60a5fa" font-size="11" font-weight="700">3 TAHAP KERJA UNIT SYNCHROMESH</text>
+            <!-- Kotak 1 -->
+            <rect x="20" y="42" width="175" height="115" rx="10" fill="#1e293b" stroke="#3b82f6"/>
+            <text x="107" y="65" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="800">1. PENGEREMAN</text>
+            <text x="107" y="88" text-anchor="middle" fill="#e2e8f0" font-size="10">Hub sleeve mendorong</text>
+            <text x="107" y="104" text-anchor="middle" fill="#e2e8f0" font-size="10">synchronizer ring ke</text>
+            <text x="107" y="120" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="700">bidang konis roda gigi</text>
+            <!-- Kotak 2 -->
+            <rect x="212" y="42" width="175" height="115" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+            <text x="299" y="65" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="800">2. PENYAMAAN PUTARAN</text>
+            <text x="299" y="88" text-anchor="middle" fill="#e2e8f0" font-size="10">Gesekan menyamakan</text>
+            <text x="299" y="104" text-anchor="middle" fill="#e2e8f0" font-size="10">putaran sleeve & gigi</text>
+            <text x="299" y="120" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">(Chamfer tertahan ring)</text>
+            <!-- Kotak 3 -->
+            <rect x="404" y="42" width="175" height="115" rx="10" fill="#1e293b" stroke="#10b981"/>
+            <text x="491" y="65" text-anchor="middle" fill="#34d399" font-size="11" font-weight="800">3. PERKAITAN PENUH</text>
+            <text x="491" y="88" text-anchor="middle" fill="#e2e8f0" font-size="10">Putaran sudah sama →</text>
+            <text x="491" y="104" text-anchor="middle" fill="#e2e8f0" font-size="10">Hub sleeve mengunci</text>
+            <text x="491" y="120" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">dog teeth tanpa bunyi</text>
+          </svg>
+        `
+      },
+      {
+        badge: 'Modul 03 • Penghubung Fleksibel Transmisi ke Gardan',
+        title: 'Poros Propeler (Propeller Shaft)',
+        subtitle: 'Meneruskan tenaga putar dari transmisi ke gardan walaupun jarak dan sudut suspensi terus berubah.',
+        fungsi: [
+          'Memindahkan tenaga putar dari output transmisi menuju drive pinion gardan (pada tipe FR / 4WD).',
+          'Menyesuaikan perubahan sudut kerja akibat naik-turunnya suspensi belakang saat melewati jalan bergelombang.',
+          'Menyesuaikan perubahan jarak antara transmisi dan gardan melalui mekanisme luncur (sliding).'
+        ],
+        komponen: [
+          'Tubular Shaft (Pipa Poros): Pipa baja berongga yang kuat terhadap puntiran namun ringan dan seimbang.',
+          'Sleeve Yoke (Sliding Yoke): Berujung alur dalam yang dapat maju-mundur pada poros output transmisi.',
+          'Universal Joint (U-Joint / Spider): Sambungan salib dengan bantalan jarum agar poros bebas menekuk.',
+          'Balance Weight: Pelat pemberat kecil yang dilas pada pipa poros untuk menjaga keseimbangan putaran tinggi.'
+        ],
+        caraKerja: [
+          'Saat suspensi belakang memegas ke atas/bawah, sudut kemiringan gardan berubah; kedua Universal Joint menekuk secara sinkron sehingga putaran tetap halus.',
+          'Perubahan jarak aksial antara transmisi dan gardan diserap oleh gerakan maju-mundur sleeve yoke pada alur output shaft transmisi.'
+        ],
+        gejala: [
+          'Getaran Keras Saat Kecepatan Tinggi: Pipa poros bengkok, balance weight lepas, atau pemasangan yoke tidak segaris (out of phase).',
+          'Bunyi "Klak" Saat Mulai Jalan/Pindah R-D: Bantalan jarum spider universal joint sudah aus atau kering.'
+        ],
+        intiBengkel: 'Sebelum melepas poros propeler, beri tanda cat (matchmark) pada flange dan yoke agar posisi keseimbangan (balance) tidak berubah saat dipasang kembali.',
+        svg: `
+          <svg viewBox="0 0 600 175" class="w-full h-auto bg-navy-950 rounded-xl border border-navy-800">
+            <text x="20" y="24" fill="#fbbf24" font-size="11" font-weight="700">KONSTRUKSI POROS PROPELER & UNIVERSAL JOINT</text>
+            <!-- Sleeve Yoke -->
+            <rect x="45" y="75" width="75" height="30" rx="6" fill="#3b82f6"/>
+            <text x="82" y="126" text-anchor="middle" fill="#93c5fd" font-size="10" font-weight="700">Sleeve Yoke</text>
+            <text x="82" y="140" text-anchor="middle" fill="#94a3b8" font-size="9">(Gerak Maju-Mundur)</text>
+            <!-- U-Joint Depan -->
+            <circle cx="138" cy="90" r="16" fill="#1e293b" stroke="#fbbf24" stroke-width="3"/>
+            <path d="M 138 78 L 138 102 M 126 90 L 150 90" stroke="#fbbf24" stroke-width="3"/>
+            <text x="155" y="58" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">U-Joint 1</text>
+            <!-- Pipa Poros -->
+            <rect x="156" y="78" width="265" height="24" rx="4" fill="#475569" stroke="#cbd5e1" stroke-width="1.5"/>
+            <rect x="275" y="72" width="28" height="6" rx="2" fill="#34d399"/>
+            <text x="289" y="62" text-anchor="middle" fill="#34d399" font-size="10" font-weight="700">Balance Weight</text>
+            <text x="289" y="126" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="700">Tubular Shaft (Pipa Berongga)</text>
+            <!-- U-Joint Belakang -->
+            <circle cx="439" cy="90" r="16" fill="#1e293b" stroke="#fbbf24" stroke-width="3"/>
+            <path d="M 439 78 L 439 102 M 427 90 L 451 90" stroke="#fbbf24" stroke-width="3"/>
+            <text x="439" y="58" text-anchor="middle" fill="#fbbf24" font-size="10" font-weight="700">U-Joint 2</text>
+            <!-- Flange ke Gardan -->
+            <rect x="458" y="70" width="22" height="40" rx="4" fill="#3b82f6"/>
+            <text x="525" y="94" fill="#e2e8f0" font-size="10" font-weight="700">→ Ke Gardan</text>
+          </svg>
+        `
+      },
+      {
+        badge: 'Modul 04 • Final Gear & Pengatur Putaran Roda Belok',
+        title: 'Gardan (Differential)',
+        subtitle: 'Memperbesar momen akhir, membelokkan arah putaran 90°, dan membedakan putaran roda kiri-kanan saat berbelok.',
+        fungsi: [
+          'Final Gear Reduction: Memperbesar momen puntir secara permanen sebelum masuk ke roda.',
+          'Mengubah Arah Putaran 90°: Dari arah memanjang poros propeler menjadi melintang ke poros roda (pada tipe FR).',
+          'Differential Action: Memungkinkan roda luar berputar lebih cepat daripada roda dalam saat kendaraan berbelok agar ban tidak selip.'
+        ],
+        komponen: [
+          'Drive Pinion & Ring Gear: Pasangan roda gigi akhir (final gear) yang mereduksi putaran dan mengubah arah 90°.',
+          'Differential Case: Rumah dudukan pinion gear dan side gear yang ikut berputar bersama ring gear.',
+          'Differential Pinion Gear (2 buah): Roda gigi satelit yang berputar pada poros pinion shaft saat terjadi beda tahanan roda.',
+          'Side Gear (2 buah): Terhubung langsung ke ujung dalam poros roda kiri dan kanan.'
+        ],
+        caraKerja: [
+          'Jalan Lurus: Tahanan roda kiri dan kanan sama → pinion gear tidak berputar pada porosnya, melainkan ikut berputar bersama differential case → putaran roda kiri = roda kanan.',
+          'Jalan Belok (misal Belok Kanan): Roda kanan (dalam) mendapat tahanan lebih besar dan melambat → pinion gear berputar mengelilingi side gear kanan sehingga menambah putaran pada side gear kiri (roda luar).'
+        ],
+        gejala: [
+          'Bunyi Dengung Konstan Saat Jalan: Penyetelan backlash atau kontak gigi antara drive pinion dan ring gear tidak tepat / bantalan aus.',
+          'Bunyi Berdecit/Berisik Saat Berbelok: Keausan pada pinion gear, side gear, atau thrust washer.'
+        ],
+        intiBengkel: 'Periksa backlash antara drive pinion dan ring gear dengan dial indicator (standar umumnya 0,13–0,18 mm) serta periksa pola kontak gigi (tooth contact) menggunakan cat khusus (prussian blue).',
+        svg: `
+          <svg viewBox="0 0 600 180" class="w-full h-auto bg-navy-950 rounded-xl border border-navy-800">
+            <text x="20" y="24" fill="#60a5fa" font-size="11" font-weight="700">PERBANDINGAN KERJA GARDAN: LURUS VS BERBELOK</text>
+            <!-- Jalan Lurus -->
+            <rect x="20" y="38" width="270" height="125" rx="10" fill="#1e293b" stroke="#3b82f6"/>
+            <text x="155" y="60" text-anchor="middle" fill="#34d399" font-size="11" font-weight="800">JALAN LURUS</text>
+            <text x="155" y="82" text-anchor="middle" fill="#e2e8f0" font-size="10">• Tahanan Roda Kiri = Roda Kanan</text>
+            <text x="155" y="100" text-anchor="middle" fill="#e2e8f0" font-size="10">• Pinion Gear DIAM pada porosnya</text>
+            <text x="155" y="122" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="700">RPM Roda Kiri = RPM Roda Kanan</text>
+            <text x="155" y="144" text-anchor="middle" fill="#94a3b8" font-size="9">(100% putaran ring gear dibagi merata)</text>
+
+            <!-- Jalan Belok -->
+            <rect x="310" y="38" width="270" height="125" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+            <text x="445" y="60" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="800">SAAT BERBELOK</text>
+            <text x="445" y="82" text-anchor="middle" fill="#e2e8f0" font-size="10">• Roda dalam lebih berat (melambat)</text>
+            <text x="445" y="100" text-anchor="middle" fill="#e2e8f0" font-size="10">• Pinion Gear BERPUTAR pada porosnya</text>
+            <text x="445" y="122" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="700">RPM Roda Luar &gt; RPM Roda Dalam</text>
+            <text x="445" y="144" text-anchor="middle" fill="#94a3b8" font-size="9">(Mencegah ban selip & keausan tidak rata)</text>
+          </svg>
+        `
+      },
+      {
+        badge: 'Modul 05 • Penerus Akhir ke Roda & Penopang Beban',
+        title: 'Poros Roda (Axle Shaft)',
+        subtitle: 'Meneruskan putaran dari side gear gardan langsung ke roda sekaligus menopang beban kendaraan.',
+        fungsi: [
+          'Meneruskan tenaga putar akhir dari side gear differential menuju hub/pelek roda penggerak.',
+          'Menopang sebagian atau seluruh berat kendaraan (khususnya pada tipe rigid axle).'
+        ],
+        komponen: [
+          'Tipe Semi-Floating (Banyak pada mobil penumpang/pickup ringan): Satu bantalan dipasang di antara poros dan axle housing; poros memikul tenaga putar sekaligus beban kendaraan.',
+          'Tipe Three-Quarter Floating: Bantalan dipasang di antara axle housing dan hub roda; poros masih menerima sedikit beban samping saat belok.',
+          'Tipe Full-Floating (Truk/kendaraan berat): Dua bantalan menopang penuh hub roda pada axle housing; poros roda murni hanya meneruskan tenaga putar.',
+          'Tipe Independent (Drive Shaft + CV Joint): Digunakan pada suspensi independen / penggerak roda depan (FF) agar roda tetap bebas memegas dan berbelok.'
+        ],
+        caraKerja: [
+          'Ujung dalam poros roda memiliki alur (spline) yang masuk ke dalam side gear gardan.',
+          'Ujung luar terhubung ke flens/hub roda untuk memutar roda sehingga kendaraan bergerak.'
+        ],
+        gejala: [
+          'Bunyi "Tek-Tek-Tek" Saat Berbelok Penuh (Tipe FF/Independent): Keausan pada Constant Velocity (CV) Joint luar atau karet boot CV joint sobek.',
+          'Oli Gardan Rembes di Bagian Rem Belakang: Seal oli poros roda aus sehingga oli masuk ke tromol rem.'
+        ],
+        intiBengkel: 'Periksa kondisi karet boot CV joint secara berkala; jika boot sobek, segera ganti dan beri gemuk (grease) khusus CV joint sebelum debu dan air merusak bantalan bola di dalamnya.',
+        svg: `
+          <svg viewBox="0 0 600 175" class="w-full h-auto bg-navy-950 rounded-xl border border-navy-800">
+            <text x="20" y="24" fill="#fbbf24" font-size="11" font-weight="700">KLASIFIKASI POROS RODA (AXLE SHAFT)</text>
+            <rect x="20" y="40" width="175" height="115" rx="10" fill="#1e293b" stroke="#3b82f6"/>
+            <text x="107" y="62" text-anchor="middle" fill="#93c5fd" font-size="11" font-weight="800">SEMI-FLOATING</text>
+            <text x="107" y="84" text-anchor="middle" fill="#e2e8f0" font-size="10">1 Bantalan di dalam</text>
+            <text x="107" y="102" text-anchor="middle" fill="#e2e8f0" font-size="10">Poros memikul beban</text>
+            <text x="107" y="120" text-anchor="middle" fill="#e2e8f0" font-size="10">+ tenaga putar</text>
+            <text x="107" y="142" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">Mobil Penumpang / MPV</text>
+
+            <rect x="212" y="40" width="175" height="115" rx="10" fill="#1e293b" stroke="#10b981"/>
+            <text x="299" y="62" text-anchor="middle" fill="#34d399" font-size="11" font-weight="800">FULL-FLOATING</text>
+            <text x="299" y="84" text-anchor="middle" fill="#e2e8f0" font-size="10">2 Bantalan di hub roda</text>
+            <text x="299" y="102" text-anchor="middle" fill="#e2e8f0" font-size="10">Poros murni hanya</text>
+            <text x="299" y="120" text-anchor="middle" fill="#e2e8f0" font-size="10">meneruskan putaran</text>
+            <text x="299" y="142" text-anchor="middle" fill="#34d399" font-size="9" font-weight="700">Truk / Kendaraan Berat</text>
+
+            <rect x="404" y="40" width="175" height="115" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+            <text x="491" y="62" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="800">DRIVE SHAFT (CV)</text>
+            <text x="491" y="84" text-anchor="middle" fill="#e2e8f0" font-size="10">Suspensi Independen</text>
+            <text x="491" y="102" text-anchor="middle" fill="#e2e8f0" font-size="10">Dilengkapi CV Joint</text>
+            <text x="491" y="120" text-anchor="middle" fill="#e2e8f0" font-size="10">fleksibel saat belok</text>
+            <text x="491" y="142" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="700">Penggerak Depan (FF)</text>
+          </svg>
+        `
+      }
+    ];
+
+    let currentModIndex = 0;
+
+    function selectModule(idx) {
+      currentModIndex = idx;
+      const mod = modulesData[idx];
+
+      // Update gaya tab tombol modul
+      document.querySelectorAll('.mod-btn').forEach((btn, i) => {
+        if (i === idx) {
+          btn.className = 'mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-navy-900 text-white border-navy-900 shadow-sm';
+        } else {
+          btn.className = 'mod-btn shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold border transition bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200';
+        }
+      });
+
+      const renderList = (items, bulletColor) =>
+        items.map(item => `
+          <li class="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <span class="w-2 h-2 rounded-full ${bulletColor} mt-1.5 shrink-0"></span>
+            <span>${item}</span>
+          </li>
+        `).join('');
+
+      document.getElementById('moduleContent').innerHTML = `
+        <div class="bg-gradient-to-r from-navy-900 to-navy-800 text-white p-5 sm:p-6">
+          <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-full">
+            ${mod.badge}
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold mt-2">${mod.title}</h3>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">${mod.subtitle}</p>
+        </div>
+
+        <div class="p-5 sm:p-6 space-y-5">
+          <!-- Diagram Ilustrasi SVG -->
+          <div class="overflow-x-auto">
+            ${mod.svg}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Fungsi Utama -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-blue-700">A. Fungsi Utama</h4>
+              <ul class="space-y-2">${renderList(mod.fungsi, 'bg-blue-600')}</ul>
+            </div>
+
+            <!-- Komponen Utama -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-navy-900">B. Komponen Utama</h4>
+              <ul class="space-y-2">${renderList(mod.komponen, 'bg-navy-800')}</ul>
+            </div>
+
+            <!-- Prinsip / Cara Kerja -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">C. Prinsip Kerja</h4>
+              <ul class="space-y-2">${renderList(mod.caraKerja, 'bg-emerald-600')}</ul>
+            </div>
+
+            <!-- Gejala Kerusakan -->
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2.5">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-rose-700">D. Analisis Gejala Gangguan</h4>
+              <ul class="space-y-2">${renderList(mod.gejala, 'bg-rose-600')}</ul>
+            </div>
+          </div>
+
+          <!-- Kotak Inti Teknis Bengkel -->
+          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-2xl p-4 flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-amber-500 text-navy-950 font-extrabold text-sm flex items-center justify-center shrink-0 mt-0.5">!</div>
+            <div>
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-amber-900">Inti Teknis Bengkel (SOP Praktik)</h4>
+              <p class="text-xs sm:text-sm text-slate-800 mt-1 leading-relaxed">${mod.intiBengkel}</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Update status tombol prev/next
+      document.getElementById('btnPrevMod').disabled = idx === 0;
+      document.getElementById('btnPrevMod').classList.toggle('opacity-40', idx === 0);
+      document.getElementById('btnNextMod').textContent = idx === modulesData.length - 1 ? 'Lanjut ke LKPD Kasus →' : 'Komponen Berikutnya →';
+    }
+
+    function prevModule() {
+      if (currentModIndex > 0) selectModule(currentModIndex - 1);
+    }
+
+    function nextModule() {
+      if (currentModIndex < modulesData.length - 1) {
+        selectModule(currentModIndex + 1);
+      } else {
+        switchTab('lkpd');
+      }
+    }
+
+    // ==================== 3. LKPD STUDI KASUS BENGKEL ====================
+    function fillSampleLkpd() {
+      document.getElementById('k1Komponen').value = 'Kampas kopling (clutch disc) tipis/aus, pegas diafragma lemah, atau penyetelan free play pedal kopling terlalu kecil.';
+      document.getElementById('k1Periksa').value = 'Memeriksa tinggi dan gerak bebas (free play) pedal kopling, memeriksa kebocoran oli seal poros engkol/transmisi, serta mengukur ketebalan kampas kopling (limit minimal 0,3 mm di atas kepala paku keling).';
+      document.getElementById('k1Solusi').value = 'Menyetel ulang free play pedal sesuai spesifikasi; jika kampas kopling sudah tipis/terbakar, lakukan penggantian clutch disc, clutch cover, dan release bearing satu set.';
+
+      document.getElementById('k2Komponen').value = 'Synchronizer ring gigi 2 aus pada bagian konis dan gigi pengarahnya.';
+      document.getElementById('k2Periksa').value = 'Memeriksa free play kopling terlebih dahulu, lalu membongkar transmisi untuk mengukur celah antara synchronizer ring dan bagian konis gigi 2 dengan feeler gauge (limit min. 0,8 mm).';
+      document.getElementById('k2Solusi').value = 'Mengganti synchronizer ring gigi 2 yang sudah aus dan mengganti oli transmisi manual sesuai viskositas SAE 80W-90 API GL-4.';
+
+      document.getElementById('k3Komponen').value = 'Pasangan drive pinion dan ring gear pada unit gardan (differential) atau bantalan pinion aus.';
+      document.getElementById('k3Periksa').value = 'Memeriksa volume dan kondisi oli gardan, mengukur backlash antara ring gear dan drive pinion dengan dial indicator (standar 0,13–0,18 mm), serta memeriksa pola kontak gigi.';
+      document.getElementById('k3Solusi').value = 'Menyetel ulang backlash dan preload bantalan gardan, mengganti komponen/bantalan yang aus, serta mengisi oli gardan SAE 90 API GL-5.';
+      showToast('Contoh jawaban analisis bengkel berhasil diisikan sebagai panduan.');
+    }
+
+    let lastLkpdSummaryText = '';
+
+    function generateLkpdSummary() {
+      const nama = document.getElementById('lkpdNama').value.trim();
+      const kelas = document.getElementById('lkpdKelas').value;
+      const kelompok = document.getElementById('lkpdKelompok').value.trim() || '-';
+
+      if (!nama) {
+        showToast('Mohon isi Nama Lengkap Peserta Didik terlebih dahulu.');
+        document.getElementById('lkpdNama').focus();
+        return;
+      }
+
+      const val = (id) => document.getElementById(id).value.trim() || '(Belum diisi)';
+
+      lastLkpdSummaryText =
+`HASIL ANALISIS LKPD STUDI KASUS BENGKEL
+Web Belajar Pemindah Tenaga Kendaraan Ringan - SMK Negeri 2 Toraja Utara
+====================================================================
+Nama Siswa : ${nama}
+Kelas      : ${kelas}
+Kelompok   : ${kelompok}
+Tanggal    : ${new Date().toLocaleDateString('id-ID', { dateStyle: 'long' })}
+
+[KASUS 1: KOPLING SELIP SAAT MENANJAK]
+• Dugaan Komponen    : ${val('k1Komponen')}
+• Langkah Pemeriksaan: ${val('k1Periksa')}
+• Solusi Perbaikan   : ${val('k1Solusi')}
+
+[KASUS 2: BUNYI "KREK" SAAT PERPINDAHAN GIGI 2]
+• Dugaan Komponen    : ${val('k2Komponen')}
+• Langkah Pemeriksaan: ${val('k2Periksa')}
+• Solusi Perbaikan   : ${val('k2Solusi')}
+
+[KASUS 3: BUNYI DENGUNG DARI GARDAN BELAKANG]
+• Dugaan Komponen    : ${val('k3Komponen')}
+• Langkah Pemeriksaan: ${val('k3Periksa')}
+• Solusi Perbaikan   : ${val('k3Solusi')}
+====================================================================`;
+
+      document.getElementById('lkpdSummaryTitle').textContent = `${nama} (${kelas})`;
+      document.getElementById('lkpdSummaryOutput').textContent = lastLkpdSummaryText;
+      document.getElementById('lkpdResultBox').classList.remove('hidden');
+      document.getElementById('lkpdResultBox').scrollIntoView({ behavior: 'smooth' });
+      showToast('Ringkasan LKPD berhasil disimpan! Silakan salin atau cetak.');
+    }
+
+    function copyLkpdText() {
+      if (!lastLkpdSummaryText) return;
+      copyTextFallback(lastLkpdSummaryText, 'Hasil LKPD berhasil disalin! Siap ditempel ke WhatsApp/Google Form guru.');
+    }
+
+    // ==================== 4. KUIS EVALUASI INTERAKTIF (10 SOAL) ====================
+    const quizQuestions = [
+      {
+        topic: 'Aliran Tenaga',
+        q: 'Urutan aliran tenaga yang benar pada kendaraan penggerak roda belakang (tipe FR) mulai dari mesin hingga ke roda adalah...',
+        options: [
+          'Mesin → Transmisi → Kopling → Poros Propeler → Gardan → Poros Roda',
+          'Mesin → Kopling → Transmisi → Poros Propeler → Gardan → Poros Roda',
+          'Mesin → Kopling → Poros Propeler → Transmisi → Gardan → Poros Roda',
+          'Mesin → Kopling → Transmisi → Gardan → Poros Propeler → Poros Roda'
+        ],
+        answer: 1,
+        explanation: 'Pada sistem penggerak FR, tenaga dari flywheel mesin diteruskan ke kopling, lalu masuk ke transmisi, dilanjutkan poros propeler ke gardan (differential), dan terakhir ke poros roda.'
+      },
+      {
+        topic: 'Kopling',
+        q: 'Ketika pengemudi menginjak pedal kopling penuh, urutan mekanisme kerja yang terjadi di dalam rumah kopling adalah...',
+        options: [
+          'Release bearing menekan pegas diafragma → pressure plate menjauh dari flywheel → kampas kopling bebas',
+          'Pegas diafragma menekan pressure plate → kampas kopling terjepit kuat ke flywheel',
+          'Release fork menarik flywheel menjauh dari poros engkol mesin',
+          'Torsion damper mengunci input shaft transmisi agar tidak berputar'
+        ],
+        answer: 0,
+        explanation: 'Saat pedal kopling diinjak, release fork mendorong release bearing menekan ujung dalam pegas diafragma sehingga pressure plate terangkat mundur dan membebaskan jepitan pada kampas kopling.'
+      },
+      {
+        topic: 'Kopling',
+        q: 'Komponen pada kampas kopling (clutch disc) yang berfungsi meredam getaran dan kejutan puntir saat kopling mulai berhubungan adalah...',
+        options: [
+          'Facing (pelat gesek)',
+          'Release bearing',
+          'Torsion damper (pegas torsi)',
+          'Clutch cover'
+        ],
+        answer: 2,
+        explanation: 'Torsion damper berupa pegas-pegas spiral atau karet pada bagian tengah kampas kopling yang menyerap kejutan puntir saat kampas kopling mulai menjepit flywheel.'
+      },
+      {
+        topic: 'Transmisi',
+        q: 'Mengapa pada saat kendaraan mulai berjalan dari posisi diam atau melewati tanjakan curam pengemudi harus menggunakan Gigi 1?',
+        options: [
+          'Karena Gigi 1 menghasilkan putaran output paling cepat dengan torsi kecil',
+          'Karena Gigi 1 memiliki perbandingan roda gigi reduksi terbesar sehingga menghasilkan momen puntir (torsi) paling besar',
+          'Karena pada Gigi 1 poros input dan output terhubung langsung (1:1)',
+          'Karena unit synchromesh hanya bekerja pada Gigi 1'
+        ],
+        answer: 1,
+        explanation: 'Gigi 1 memutar roda gigi kecil menggerakkan roda gigi besar (reduksi putaran besar) sehingga momen puntir/torsi dilipatgandakan untuk mengatasi beban awal dan tanjakan.'
+      },
+      {
+        topic: 'Transmisi',
+        q: 'Pada unit synchromesh transmisi manual, komponen yang bergesekan langsung dengan bagian konis roda gigi tingkat untuk menyamakan putaran sebelum gigi berkaitan penuh adalah...',
+        options: [
+          'Shift fork',
+          'Synchronizer ring (blocker ring)',
+          'Counter shaft',
+          'Reverse idler gear'
+        ],
+        answer: 1,
+        explanation: 'Synchronizer ring memiliki permukaan dalam berbentuk konis berulir yang menekan permukaan konis roda gigi tingkat untuk melakukan pengereman dan penyamaan putaran.'
+      },
+      {
+        topic: 'Poros Propeler',
+        q: 'Fungsi utama pemasangan Universal Joint (U-Joint) pada kedua ujung poros propeler adalah...',
+        options: [
+          'Memperbesar momen puntir dari transmisi sebesar dua kali lipat',
+          'Memungkinkan poros propeler meneruskan putaran dengan halus meskipun sudut antara transmisi dan gardan berubah-ubah akibat kerja suspensi',
+          'Membedakan kecepatan putar roda kiri dan kanan saat berbelok',
+          'Mengubah arah putaran sebesar 90 derajat menuju roda'
+        ],
+        answer: 1,
+        explanation: 'Jarak dan sudut antara transmisi (yang terikat pada sasis) dan gardan (yang mengikuti gerakan suspensi) selalu berubah; U-joint menjaga penerusan putaran tetap lancar pada sudut yang berubah.'
+      },
+      {
+        topic: 'Poros Propeler',
+        q: 'Komponen pada poros propeler yang berfungsi menyerap perubahan jarak aksial antara transmisi dan gardan saat suspensi memegas adalah...',
+        options: [
+          'Balance weight',
+          'Sleeve yoke (sliding yoke)',
+          'Drive pinion',
+          'Clutch hub'
+        ],
+        answer: 1,
+        explanation: 'Sleeve yoke memiliki alur dalam (spline) yang dapat bergeser maju-mundur pada poros output transmisi mengikuti perubahan jarak kerja suspensi.'
+      },
+      {
+        topic: 'Gardan',
+        q: 'Ketika kendaraan berbelok ke kiri, bagaimana cara kerja roda gigi di dalam differential (gardan)?',
+        options: [
+          'Pinion gear diam pada porosnya sehingga roda kiri dan kanan berputar sama cepat',
+          'Pinion gear berputar pada porosnya karena tahanan roda kiri lebih besar, sehingga roda kanan (luar) berputar lebih cepat daripada roda kiri (dalam)',
+          'Drive pinion berhenti memutar ring gear sementara waktu',
+          'Side gear kiri berputar berlawanan arah dengan side gear kanan'
+        ],
+        answer: 1,
+        explanation: 'Saat belok kiri, roda kiri menempuh lintasan lebih pendek dan mendapat tahanan lebih besar sehingga melambat; pinion gear berputar pada porosnya untuk menyalurkan putaran ekstra ke side gear kanan (roda luar).'
+      },
+      {
+        topic: 'Gardan',
+        q: 'Pasangan roda gigi pada gardan yang berfungsi memperbesar momen akhir sekaligus mengubah arah putaran sebesar 90° pada kendaraan tipe FR adalah...',
+        options: [
+          'Pinion gear dan side gear',
+          'Counter gear dan main gear',
+          'Drive pinion dan ring gear',
+          'Hub sleeve dan clutch hub'
+        ],
+        answer: 2,
+        explanation: 'Drive pinion (berbentuk bevel/hypoid gear) memutar ring gear yang posisinya tegak lurus (90°), sekaligus mereduksi putaran untuk memperbesar momen akhir.'
+      },
+      {
+        topic: 'Poros Roda',
+        q: 'Pada kendaraan truk pengangkut beban berat, konstruksi poros roda belakang umumnya menggunakan tipe Full-Floating karena...',
+        options: [
+          'Bantalan dipasang di dalam axle housing sehingga poros memikul seluruh berat muatan',
+          'Hub roda ditopang oleh dua bantalan pada axle housing sehingga poros roda murni hanya meneruskan tenaga putar dan tidak memikul beban kendaraan',
+          'Poros roda dilengkapi karet boot dan CV joint di kedua ujungnya',
+          'Tidak memerlukan pelumasan dari oli gardan maupun gemuk bantalan'
+        ],
+        answer: 1,
+        explanation: 'Pada tipe Full-Floating, seluruh beban kendaraan dipikul oleh axle housing melalui dua bantalan roda, sehingga poros roda bebas dari beban tekuk dan hanya meneruskan momen puntir.'
+      }
+    ];
+
+    let userAnswers = new Array(quizQuestions.length).fill(null);
+
+    function startQuiz() {
+      const nama = document.getElementById('quizNama').value.trim();
+      const kelas = document.getElementById('quizKelas').value;
+
+      if (!nama) {
+        showToast('Mohon masukkan Nama Peserta Didik sebelum memulai kuis.');
+        document.getElementById('quizNama').focus();
+        return;
+      }
+
+      userAnswers = new Array(quizQuestions.length).fill(null);
+      document.getElementById('quizStudentInfo').textContent = `Peserta: ${nama} • Kelas ${kelas}`;
+      document.getElementById('quizAnsweredCount').textContent = '0';
+
+      const container = document.getElementById('quizQuestionsContainer');
+      container.innerHTML = quizQuestions.map((item, qIdx) => `
+        <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-3">
+          <div class="flex items-start gap-3">
+            <span class="w-7 h-7 rounded-lg bg-navy-900 text-amber-400 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+              ${qIdx + 1}
+            </span>
+            <div class="space-y-1">
+              <span class="inline-block text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                Topik: ${item.topic}
+              </span>
+              <p class="text-sm sm:text-base font-bold text-navy-900 leading-snug">${item.q}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-2 pl-0 sm:pl-10">
+            ${item.options.map((opt, optIdx) => {
+              const letters = ['A', 'B', 'C', 'D'];
+              return `
+                <button type="button" onclick="selectOption(${qIdx}, ${optIdx})" id="q${qIdx}_opt${optIdx}"
+                  class="q-opt-${qIdx} text-left p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-start gap-3 text-xs sm:text-sm text-slate-700">
+                  <span class="w-6 h-6 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">
+                    ${letters[optIdx]}
+                  </span>
+                  <span class="leading-snug pt-0.5">${opt}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('quizIntro').classList.add('hidden');
+      document.getElementById('quizResult').classList.add('hidden');
+      document.getElementById('quizBody').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectOption(qIdx, optIdx) {
+      userAnswers[qIdx] = optIdx;
+      const letters = ['A', 'B', 'C', 'D'];
+
+      document.querySelectorAll(`.q-opt-${qIdx}`).forEach((btn, idx) => {
+        const badge = btn.querySelector('span');
+        if (idx === optIdx) {
+          btn.className = `q-opt-${qIdx} text-left p-3 rounded-xl border-2 border-blue-600 bg-blue-50 transition flex items-start gap-3 text-xs sm:text-sm text-navy-900 font-semibold`;
+          badge.className = 'w-6 h-6 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0';
+        } else {
+          btn.className = `q-opt-${qIdx} text-left p-3 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-start gap-3 text-xs sm:text-sm text-slate-700`;
+          badge.className = 'w-6 h-6 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0';
+        }
+        badge.textContent = letters[idx];
+      });
+
+      const answered = userAnswers.filter(v => v !== null).length;
+      document.getElementById('quizAnsweredCount').textContent = answered;
+    }
+
+    let lastQuizReportText = '';
+
+    function submitQuiz() {
+      const unansweredIdx = userAnswers.findIndex(v => v === null);
+      if (unansweredIdx !== -1) {
+        showToast(`Nomor ${unansweredIdx + 1} belum dijawab. Lengkapi semua soal terlebih dahulu.`);
+        return;
+      }
+
+      const nama = document.getElementById('quizNama').value.trim();
+      const kelas = document.getElementById('quizKelas').value;
+      const letters = ['A', 'B', 'C', 'D'];
+
+      let correctCount = 0;
+      const topicStats = {};
+
+      quizQuestions.forEach((item, idx) => {
+        if (!topicStats[item.topic]) topicStats[item.topic] = { total: 0, correct: 0 };
+        topicStats[item.topic].total++;
+        if (userAnswers[idx] === item.answer) {
+          correctCount++;
+          topicStats[item.topic].correct++;
+        }
+      });
+
+      const score = correctCount * 10;
+      const isPassed = score >= 75;
+
+      // Render Header Skor
+      const badge = document.getElementById('resultStatusBadge');
+      badge.textContent = isPassed ? 'TUNTAS (KKTP ≥ 75)' : 'PERLU PENGUATAN (KKTP < 75)';
+      badge.className = isPassed
+        ? 'inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+        : 'inline-block px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/40';
+
+      document.getElementById('resultStudentHeading').textContent = `${nama} — ${kelas}`;
+      document.getElementById('resultMessage').textContent = isPassed
+        ? 'Selamat! Pemahaman Anda terhadap sistem pemindah tenaga kendaraan ringan sudah melampaui batas ketuntasan belajar.'
+        : 'Silakan pelajari kembali pembahasan nomor soal yang masih keliru dan tinjau ulang modul materi terkait.';
+      document.getElementById('resultScoreNumber').textContent = score;
+      document.getElementById('resultCorrectDetail').textContent = `${correctCount} dari ${quizQuestions.length} Soal Benar`;
+
+      // Render Analisis Per Topik
+      const topicBreakdown = document.getElementById('topicBreakdown');
+      topicBreakdown.innerHTML = Object.entries(topicStats).map(([topic, st]) => {
+        const ok = st.correct === st.total;
+        return `
+          <div class="bg-navy-950/70 border ${ok ? 'border-emerald-500/40' : 'border-amber-500/40'} rounded-xl p-2.5 text-center">
+            <p class="text-[11px] text-slate-300 font-semibold truncate">${topic}</p>
+            <p class="text-sm font-extrabold font-mono ${ok ? 'text-emerald-400' : 'text-amber-400'} mt-0.5">${st.correct}/${st.total}</p>
+          </div>
+        `;
+      }).join('');
+
+      // Render Pembahasan Lengkap
+      const reviewContainer = document.getElementById('quizReviewContainer');
+      reviewContainer.innerHTML = quizQuestions.map((item, idx) => {
+        const isCorrect = userAnswers[idx] === item.answer;
+        return `
+          <div class="bg-white rounded-2xl p-4 sm:p-5 border-l-4 ${isCorrect ? 'border-emerald-500' : 'border-rose-500'} shadow-sm border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-extrabold text-navy-900">Soal #${idx + 1} • ${item.topic}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold ${isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                ${isCorrect ? '✓ Jawaban Benar' : '✕ Perlu Diperbaiki'}
+              </span>
+            </div>
+            <p class="text-sm font-bold text-slate-900">${item.q}</p>
+            <div class="text-xs sm:text-sm space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+              <p class="${isCorrect ? 'text-emerald-700' : 'text-rose-700'} font-semibold">
+                Jawaban Anda: ${letters[userAnswers[idx]]}. ${item.options[userAnswers[idx]]}
+              </p>
+              ${!isCorrect ? `
+                <p class="text-emerald-700 font-bold">
+                  Kunci Jawaban: ${letters[item.answer]}. ${item.options[item.answer]}
+                </p>
+              ` : ''}
+              <p class="text-slate-700 pt-1 border-t border-slate-200 mt-1.5 leading-relaxed">
+                <strong>Pembahasan:</strong> ${item.explanation}
+              </p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      lastQuizReportText =
+`LAPORAN HASIL KUIS EVALUASI PEMINDAH TENAGA
+SMK Negeri 2 Toraja Utara
+-------------------------------------------
+Nama Siswa : ${nama}
+Kelas      : ${kelas}
+Skor Akhir : ${score} / 100 (${correctCount} dari 10 Benar)
+Status     : ${isPassed ? 'TUNTAS (KKTP >= 75)' : 'PERLU PENGUATAN'}
+Tanggal    : ${new Date().toLocaleDateString('id-ID', { dateStyle: 'long' })}
+-------------------------------------------`;
+
+      document.getElementById('quizBody').classList.add('hidden');
+      document.getElementById('quizResult').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast(`Kuis selesai! Skor Anda: ${score}`);
+    }
+
+    function copyQuizReport() {
+      if (!lastQuizReportText) return;
+      copyTextFallback(lastQuizReportText, 'Laporan nilai kuis berhasil disalin!');
+    }
+
+    function resetQuiz() {
+      document.getElementById('quizResult').classList.add('hidden');
+      document.getElementById('quizBody').classList.add('hidden');
+      document.getElementById('quizIntro').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==================== INISIALISASI SAAT HALAMAN DIMUAT ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      updateSimulator();
+      selectModule(0);
+    });
+  </script>
+</body>
+</html>
